@@ -8,9 +8,6 @@ http://code.activestate.com/recipes/325823-draw-svg-images-in-python/
 The following code is a lightweight wrapper around SVG files. The metaphor
 is to construct a scene, add objects to it, and then write it to a file
 to display it.
-
-This program uses ImageMagick to display the SVG files. ImageMagick also
-does a remarkable job of converting SVG files into other formats.
 """
 
 class Scene:
