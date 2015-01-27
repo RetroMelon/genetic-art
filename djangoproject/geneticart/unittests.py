@@ -50,6 +50,7 @@ class TestGenerator(unittest.TestCase):
             grand_total = a_total + b_total + c_total
             actual_weights = [a_total*1.0/grand_total, c_total*1.0/grand_total, c_total*1.0/grand_total]
 
+            #checking the weight for each parent roughly matches what it's supposed to.
             zipped_weights = zip(actual_weights, weights_list)
             map(lambda x: self.assertTrue(x[1]*0.8 <= x[0] <= x[1]*1.2, msg="Failed for weightslist"+str(weights_list)), zipped_weights)
 
