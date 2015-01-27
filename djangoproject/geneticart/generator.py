@@ -73,9 +73,16 @@ def generate_genome(parent_genomes, parent_weights=[], **kwargs):
         mutation_factor - the average factor that each gene mutates by.
 
     """
-    print "parent_genomes", parent_genomes
-    print "parent_weights", parent_weights
-    print "generate_genome kwargs", kwargs
+
+    #If the user did not provide any weights, make a default weights list.
+    if len(parent_weights) == 0: #if the user did not provide any weights, set up defaults
+        parent_weights = [1.0/len(parent_genomes)] * len(parent_genomes)
+    elif sum(parent_weights) != 1.0:
+        divisor = sum(parent_weights) * 1.0
+        parent_weights = map(lambda x: x/divisor, parent_weights)
+
+
+    return ["a"]*20
 
 
 def mutate_genome(genome, mutation_frequency=0.2, mutation_factor=0.2):
