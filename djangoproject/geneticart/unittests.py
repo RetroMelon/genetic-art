@@ -10,14 +10,14 @@ import generator
 class TestGenerator(unittest.TestCase):
 
     def setUp(self):
-        pass #self.test_genomes = [generator.gerate_new_genome() for i in range(3)]
+        pass
 
-    def generate_generation_(self):
-        generator.generate_generation(parent_genomes=["hi", "hey", "hello"], parent_weights=[1, 2, 3], mutation_chance=0.5, mutation_factor=0.2)
-
+    def test_generate_generation(self):
+        pass
+        #generator.generate_generation(parent_genomes=[[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]], parent_weights=[1, 2, 3, 1], mutation_frequency=0.5, mutation_factor=0.2)
         # should raise an exception for an immutable sequence
         #self.assertRaises(TypeError, random.shuffle, (1,2,3))
-        return True
+
 
     def test_generate_genome(self):
         #setting up some parent genomes. Whether each gene is a string or int is irrelevant.
@@ -42,17 +42,26 @@ class TestGenerator(unittest.TestCase):
             #generating 100 children, and adding the totals of each gene to (a/b/c)_total
             for i in range(100):
                 child_genome = generator.generate_genome(parent_genomes, parent_weights=weights_list, mutation_frequency=0, mutation_factor=0)
+
+                #checking that the child is the right length
+                self.assertTrue(len(child_genome)==len(parent_genomes[0]))
+
+                #adding the child's genes to the total counts
                 a_total += child_genome.count("a")
-                a_total += child_genome.count("b")
-                a_total += child_genome.count("c")
+                b_total += child_genome.count("b")
+                c_total += child_genome.count("c")
 
             #calculating the grand total of genes, and the actual weights of each gene
             grand_total = a_total + b_total + c_total
-            actual_weights = [a_total*1.0/grand_total, c_total*1.0/grand_total, c_total*1.0/grand_total]
+            actual_weights = [a_total*1.0/grand_total, b_total*1.0/grand_total, c_total*1.0/grand_total]
+
+            #Some of the weights lists use larger numbers than 1, so reducing them to a "unit weightslist"
+            divisor = sum(weights_list) * 1.0
+            weights_list = map(lambda x: x/divisor, weights_list)
 
             #checking the weight for each parent roughly matches what it's supposed to.
             zipped_weights = zip(actual_weights, weights_list)
-            map(lambda x: self.assertTrue(x[1]*0.8 <= x[0] <= x[1]*1.2, msg="Failed for weightslist"+str(weights_list)), zipped_weights)
+            map(lambda x: self.assertTrue(x[1]*0.8 <= x[0] <= x[1]*1.2, msg="Failed for weightslist"+str(weights_list)+". actual weights: "+str(actual_weights)), zipped_weights)
 
 
 
@@ -83,7 +92,7 @@ class TestGenerator(unittest.TestCase):
 
         #calculating the average change ratio, and making sure it is what we expected.
         average_change_ratio = sum(change_ratio_results)*1.0/len(change_ratio_results)
-        self.assertTrue(0.18 <= average_change_ratio <= 0.22)
+        self.assertTrue(0.18 <= average_change_ratio <= 0.22, msg="average change ratio should be "+str(mutation_frequency)+" but is "+str(average_change_ratio))
 
 
 if __name__ == "__main__":

@@ -19,8 +19,8 @@ This class contains constants which are:
     The length of a single circle in the genome given the able factors.
     The default generation size.
 """
-
-import operator, random
+from numpy import random
+import operator
 
 #The number of circles per image.
 NUMBER_OF_CIRCLES = 10
@@ -35,29 +35,47 @@ GENETIC_CODE_LENGTH = reduce(operator.mul, CIRCLE_DIMENSIONS) * NUMBER_OF_CIRCLE
 CIRCLE_CODE_LENGTH = reduce(operator.add, CIRCLE_DIMENSIONS)
 
 #The number of images in any one generation.
-GENERATION_SIZE = 6
+GENERATION_SIZE = 8
 
 #The number of genomes per generation which should be completely new
 NEW_GENOMES_PER_GENERATION = 2
 
+#The number of parents that get to continue on to the next generation.
+TOP_PARENTS_PER_GENERATION = 2
 
-def generate_generation(generation_size=GENERATION_SIZE, **kwargs):
+
+def generate_generation(parent_genomes, parent_weights=[], generation_size=GENERATION_SIZE, new_genomes=NEW_GENOMES_PER_GENERATION, top_parents=TOP_PARENTS_PER_GENERATION, **kwargs):
     """
     Generates a list of genomes, the amount of which is dependent on the GENERATION-SIZE constant.
-    The list of genomes can be a combination of the original parents, completely new genomes and
-    mutations of the original parents.
+    The list of genomes is a mixture of completely new genomes, the original parents and mutations of the parents.
 
     This function takes GENERATION_SIZE as an optional parameter and the following as kwargs:
         parent_genomes - a list of parent genomes.
-        parent_weights - a list of weights that the parents hold on the child genomes.
         mutation_frequency - the amount of the genome to mutate. eg. 0.2 would be 1/5th of the genome.
         mutation_factor - the average factor that each gene mutates by.
 
     """
+    #creating the new generation and adding the new genomes
+    generation = [generate_new_genome() for i in range(new_genomes)]
 
-    print "generation_size", generation_size
-    print "generate_genome kwargs", kwargs
-    generate_genome(**kwargs)
+    #checking if we are able to add parents to the generation
+    if top_parents > 0 and len(parent_weights) > 0:
+        #selecting the top few parents and adding them to the generation
+        #zipping the parents with their weights and sorting for highest weight.
+        zipped_parents = zip(parent_weights, parent_genomes)
+        zipped_parents.sort()
+
+        #taking the top x number of parents and unzipping to get them
+        top_parents = zip(*(zipped_parents[:top_parents]))[1]
+        generation.extend(top_parents)
+
+
+    #generating children to fill the rest of the spaces
+    remaining_genomes = generation_size - len(generation)
+    for i in range(remaining_genomes):
+        generation.append(generate_genome(parent_genomes=parent_genomes, parent_weights=parent_weights, **kwargs))
+
+    return generation
 
 
 def generate_genome(parent_genomes, parent_weights=[], **kwargs):
@@ -71,7 +89,6 @@ def generate_genome(parent_genomes, parent_weights=[], **kwargs):
     This function takes following as kwargs to pass to the mutate function:
         mutation_frequency - the amount of the genome to mutate. eg. 0.2 would be 1/5th of the genome.
         mutation_factor - the average factor that each gene mutates by.
-
     """
 
     #If the user did not provide any weights, make a default weights list.
@@ -81,8 +98,14 @@ def generate_genome(parent_genomes, parent_weights=[], **kwargs):
         divisor = sum(parent_weights) * 1.0
         parent_weights = map(lambda x: x/divisor, parent_weights)
 
+    #randomly choosing parent genes on a weighted basis
+    #it uses the length of the first parent genome. assumes they are all the same length
+    genome = [random.choice(map(lambda x: x[i], parent_genomes), p=parent_weights) for i in xrange(len(parent_genomes[0]))]
 
-    return ["a"]*20
+    #mutating the genome.
+    mutate_genome(genome, **kwargs)
+
+    return genome
 
 
 def mutate_genome(genome, mutation_frequency=0.2, mutation_factor=0.2):
@@ -119,3 +142,6 @@ def generate_new_genome(genetic_code_length=GENETIC_CODE_LENGTH):
     The max and min for each gene are 0 to 255.
     """
     return [random.randint(0, 255) for i in xrange(genetic_code_length)]
+
+
+if __name__ == "__main__":
