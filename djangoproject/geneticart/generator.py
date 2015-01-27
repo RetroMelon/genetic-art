@@ -21,6 +21,7 @@ This class contains constants which are:
 """
 from numpy import random
 import operator
+import svg
 
 #The number of circles per image.
 NUMBER_OF_CIRCLES = 10
@@ -144,4 +145,22 @@ def generate_new_genome(genetic_code_length=GENETIC_CODE_LENGTH):
     return [random.randint(0, 255) for i in xrange(genetic_code_length)]
 
 
-if __name__ == "__main__":
+#generates an svg string of an image
+def generate_image(genome, name="unnamed"):
+    #creating an svg
+    scene = svg.Scene(name, height=255, width=255)
+
+    #iterating over each circle
+    for i in range(len(genome)/CIRCLE_CODE_LENGTH):
+        start = i * CIRCLE_CODE_LENGTH
+        end = (i+1) * CIRCLE_CODE_LENGTH
+
+        circle_code = genome[start:end]
+
+        xy = tuple(circle_code[:2]) #getting the location of the circle from the gene
+        radius = circle_code[2] #getting the radius of the circle from the gene #ALSO SCALING RAD DOWN A BIT
+        rgba = tuple(circle_code[3:]) #getting the rgba values of the circle
+
+        scene.add(svg.Circle(xy, radius, rgba))
+
+    return scene.strarray()
