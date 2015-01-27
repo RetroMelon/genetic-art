@@ -20,7 +20,7 @@ This class contains constants which are:
     The default generation size.
 """
 
-import operator
+import operator, random
 
 #The number of circles per image.
 NUMBER_OF_CIRCLES = 10
@@ -50,7 +50,7 @@ def generate_generation(generation_size=GENERATION_SIZE, **kwargs):
     This function takes GENERATION_SIZE as an optional parameter and the following as kwargs:
         parent_genomes - a list of parent genomes.
         parent_weights - a list of weights that the parents hold on the child genomes.
-        mutation_amount - the amount of the genome to mutate. eg. 0.2 would be 1/5th of the genome.
+        mutation_frequency - the amount of the genome to mutate. eg. 0.2 would be 1/5th of the genome.
         mutation_factor - the average factor that each gene mutates by.
 
     """
@@ -69,7 +69,7 @@ def generate_genome(parent_genomes, parent_weights=[], **kwargs):
         parent_weights - a list of weights that the parents hold on the child genomes.
 
     This function takes following as kwargs to pass to the mutate function:
-        mutation_amount - the amount of the genome to mutate. eg. 0.2 would be 1/5th of the genome.
+        mutation_frequency - the amount of the genome to mutate. eg. 0.2 would be 1/5th of the genome.
         mutation_factor - the average factor that each gene mutates by.
 
     """
@@ -78,20 +78,37 @@ def generate_genome(parent_genomes, parent_weights=[], **kwargs):
     print "generate_genome kwargs", kwargs
 
 
-def mutate_genome(genome, mutation_amount=0.2, mutation_factor=0.2):
+def mutate_genome(genome, mutation_frequency=0.2, mutation_factor=0.2):
     """
     Mutates some of the genes in a genome guided by the parameters.
 
     This function takes following parameters:
         genome - the genome the function is going to mutate.
-        mutation_amount - the amount of the genome to mutate. eg. 0.2 would be 1/5th of the genome.
+        mutation_frequency - the amount of the genome to mutate. eg. 0.2 would be 1/5th of the genome.
         mutation_factor - the average factor that each gene mutates by.
 
     this method directly edits the list it is given, so it is advised to
     make a copy before calling if you don't want your genome to change.
     """
-    pass
+
+    for index, gene in enumerate(genome):
+        if random.random() <= mutation_frequency:
+            #mutating the gene
+            new_gene = int(gene * (1 + random.choice([1, -1])*mutation_factor))
+
+            #capping the gene at the limits
+            if new_gene < 0:
+                new_gene = 0
+            elif new_gene > 255:
+                new_gene = 255
+
+            genome[index] = new_gene
+
+    return genome
 
 def generate_new_genome(genetic_code_length=GENETIC_CODE_LENGTH):
-
-    pass
+    """
+    Generates a genome of the length specified.
+    The max and min for each gene are 0 to 255.
+    """
+    return [random.randint(0, 255) for i in xrange(genetic_code_length)]
