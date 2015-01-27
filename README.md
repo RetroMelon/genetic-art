@@ -14,7 +14,7 @@ A second attempt at generating nice looking images in django using a genetic alg
 
 - <strike>0.5 - Start Django project.</strike>
 -  2 - write test cases for generator.py.
-- 0.5 - import svg.py in to this app.
+- <strike>0.5 - import svg.py in to this app.</strike>
 - 1 - write generator.py.
 - 0.5 - write a view that shows an image generated from generator.py.
 - 1 - write some test cases for Image models.
