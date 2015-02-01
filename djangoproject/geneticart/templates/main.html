@@ -1,0 +1,28 @@
+<html>
+<head>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      {% for i in images %}
+      <div class="col-xs-6 col-sm-4 col-md-3">
+          <img class="mainimage" src="/getimage?id={{i}}" image_id={{i}} alt="Image ID {{i}}.">
+            <h1 class="innertext"></h1>
+          </img>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="chorizontal">
+      <input type="button" class="btn" id="undobutton" value="undo"></a>
+    </div>
+  </div>
+</body>
+
+<footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="/static/js/main.js"></script>
+</footer>
+</html>
