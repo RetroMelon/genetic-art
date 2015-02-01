@@ -19,6 +19,5 @@ class Image(models.Model):
     #parents - many to many with image.
     parents = models.ManyToManyField("Image", blank=True)
 
-
     def __unicode__(self):
-        return "Image"+str(self.id)+" gen:"+str(self.generation)+" pop:"+str(self.popularity)
+        return 'Image ' + str(self.id)
