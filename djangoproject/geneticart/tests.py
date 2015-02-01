@@ -1,6 +1,7 @@
 from django.test import TestCase
 from models import Image
 
+
 #testing the Image model
 class ImageTestCase(TestCase):
     def setUp(self):
