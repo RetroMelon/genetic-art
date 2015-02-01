@@ -16,9 +16,9 @@ A second attempt at generating nice looking images in django using a genetic alg
 - <strike>2 - write test cases for generator.py.</strike>
 - <strike>0.5 - import svg.py in to this app.</strike>
 - <strike>1 - write generator.py.</strike>
-- 0.5 - write a view that shows an image generated from generator.py.
+- <strike>0.5 - write a view that shows an image generated from generator.py.</strike>
 - 1 - write some test cases for Image models.
-- 2 - write the Image model.
+- <strike>2 - write the Image model.</strike>
 - 1 - write the admin panel code for Images.
 - 1 - write a template and view for the frontend.
 - 3 - write the javascript for the front end to send and receive choices/images.
