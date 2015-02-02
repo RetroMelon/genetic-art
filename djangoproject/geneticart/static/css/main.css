@@ -29,6 +29,7 @@
 #undobutton {
   text-align: center;
   vertical-align: middle;
+  margin: 10px 20px;
 }
 
 .chorizontal {
@@ -36,4 +37,21 @@
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+}
+
+
+.treecontainer {
+  height: 200px;
+  width: 100%;
+  background-color: #eeeeee;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.treeitem {
+  border-right: solid 1px #cccccc;
+  height: 100%;
+  text-center: middle;
+  display: inline-block;
+  padding: 30px;
 }
